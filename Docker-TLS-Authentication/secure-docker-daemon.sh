@@ -5,7 +5,7 @@ set -eu
 cd ~
 echo "you are now in $PWD"
 
-if [ ! -d ".docker/" ] 
+if [ ! -d ".docker/" ]
 then
     echo "Directory ./docker/ does not exist"
     echo "Creating the directory"
@@ -20,7 +20,7 @@ echo "Type in the server name you’ll use to connect to the Docker server"
 read -p '>' SERVER
 
 # 256bit AES (Advanced Encryption Standard) is the encryption cipher which is used for generating certificate authority (CA) with 2048-bit security.
-openssl genrsa -aes256 -passout pass:$PASSWORD -out ca-key.pem 2048 
+openssl genrsa -aes256 -passout pass:$PASSWORD -out ca-key.pem 2048
 
 # Sign the the previously created CA key with your password and address for a period of one year.
 # i.e. generating a self-signed certificate for CA
@@ -43,8 +43,10 @@ openssl genrsa -out key.pem 2048
 # Process the key as a client key.
 openssl req -subj '/CN=client' -new -key key.pem -out client.csr
 
+sh -c 'echo "subjectAltName = DNS:centos7,IP: 192.168.33.10" >> extfile.cnf'
+
 # To make the key suitable for client authentication, create an extensions config file:
-sh -c 'echo "extendedKeyUsage = clientAuth" > extfile.cnf'
+sh -c 'echo "extendedKeyUsage = clientAuth" >> extfile.cnf'
 
 # Sign the (public) key with your password for a period of one year
 openssl x509 -req -days 365 -in client.csr -CA ca.pem -CAkey ca-key.pem -passin "pass:$PASSWORD" -CAcreateserial -out cert.pem -extfile extfile.cnf
@@ -53,7 +55,7 @@ echo "Removing unnecessary files i.e. client.csr extfile.cnf server.csr"
 rm ca.srl client.csr extfile.cnf server.csr
 
 echo "Changing the permissions to readonly by root for the server files."
-# To make them only readable by you: 
+# To make them only readable by you:
 chmod 0400 ca-key.pem key.pem server-key.pem
 
 echo "Changing the permissions of the client files to read-only by everyone"
