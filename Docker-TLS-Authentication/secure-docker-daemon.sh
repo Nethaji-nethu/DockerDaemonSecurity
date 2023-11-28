@@ -43,7 +43,7 @@ openssl genrsa -out key.pem 2048
 # Process the key as a client key.
 openssl req -subj '/CN=client' -new -key key.pem -out client.csr
 
-sh -c 'echo "subjectAltName = DNS:centos7,IP: 192.168.33.10" >> extfile.cnf'
+sh -c 'echo "subjectAltName = DNS:$SERVER,IP: 192.168.33.10" >> extfile.cnf'
 
 # To make the key suitable for client authentication, create an extensions config file:
 sh -c 'echo "extendedKeyUsage = clientAuth" >> extfile.cnf'
