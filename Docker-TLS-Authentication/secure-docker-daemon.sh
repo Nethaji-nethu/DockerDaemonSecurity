@@ -16,7 +16,7 @@ cd .docker/
 echo "type in your certificate password (characters are not echoed)"
 read -p '>' -s PASSWORD
 
-echo "Type in the server name you’ll use to connect to the Docker server"
+echo "Enter the docker host's hostname or FQDN"
 read -p '>' SERVER
 
 # 256bit AES (Advanced Encryption Standard) is the encryption cipher which is used for generating certificate authority (CA) with 2048-bit security.
